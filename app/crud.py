@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models import Book, City
-from schemas import BookSchema, CitySchema
+from models import City
+from schemas import CitySchema
 
 
 def get_city(db: Session, skip: int = 0, limit: int = 100):
