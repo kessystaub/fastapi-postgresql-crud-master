@@ -5,21 +5,12 @@ from pydantic.generics import GenericModel
 T = TypeVar('T')
 
 
-class BookSchema(BaseModel):
-    id: Optional[int] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-
-    class Config:
-        orm_mode = True
+class Config:
+    orm_mode = True
 
 
 class Request(GenericModel, Generic[T]):
     parameter: Optional[T] = Field(...)
-
-
-class RequestBook(BaseModel):
-    parameter: BookSchema = Field(...)
 
 
 class Response(GenericModel, Generic[T]):
@@ -31,9 +22,27 @@ class Response(GenericModel, Generic[T]):
 
 class CitySchema(BaseModel):
     id: Optional[int] = None
-    name: Optional[str] = None
-    uf: Optional[str] = None
+    name: str
+    uf: str
 
 
 class RequestCity(BaseModel):
     parameter: CitySchema = Field(...)
+
+
+class UserSchema(BaseModel):
+    id: Optional[int] = None
+    name: str
+    password: str
+    email: str
+    phone: str
+    address: str
+    # city_id: int
+    # hardskill_id: int
+    # softskill_id: int
+    # formation_id: int
+    # experience_id: int
+
+
+class RequestUser(BaseModel):
+    parameter: UserSchema = Field(...)
