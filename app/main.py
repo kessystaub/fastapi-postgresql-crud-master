@@ -13,6 +13,7 @@ from routes_status import router_status
 from routes_user_hardskill import router_user_hardskill
 from routes_user_softskill import router_user_softskill
 from routes_position import router_position
+from routes_institution import router_institution
 from config import engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -37,3 +38,5 @@ app.include_router(router_user_softskill,
                    prefix="/user_softskill", tags=["user_softskill"])
 app.include_router(router_position,
                    prefix="/position", tags=["position"])
+app.include_router(router_institution,
+                   prefix="/institution", tags=["institution"])

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill, Position
+from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill, Position, Institution
 from schemas import CitySchema
 
 import schemas
@@ -176,8 +176,8 @@ def update_formation(db: Session, formation_id: int, formation: schemas.Formatio
     _formation = get_formation_by_id(db=db, formation_id=formation_id)
 
     _formation.course = formation.course
-    _formation.institution: formation.institution
     _formation.date: formation.date
+    _formation.institution_id: formation.institution_id
 
     db.commit()
     db.refresh(_formation)
@@ -492,4 +492,41 @@ def remove_position(db: Session, position_id: int):
     _position = get_position_by_id(
         db=db, position_id=position_id)
     db.delete(_position)
+    db.commit()
+
+
+# Institution
+
+
+def get_institution(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Institution).offset(skip).limit(limit).all()
+
+
+def get_institution_by_id(db: Session, institution_id: int):
+    return db.query(Institution).filter(Institution.id == institution_id).first()
+
+
+def create_institution(db: Session, institution: schemas.InstitutionSchema):
+    db_institution = models.Institution(**institution.dict())
+    db.add(db_institution)
+    db.commit()
+    db.refresh(db_institution)
+    return db_institution
+
+
+def update_institution(db: Session, institution_id: int, institution: schemas.InstitutionSchema):
+    _institution = get_institution_by_id(
+        db=db, institution_id=institution_id)
+
+    _institution.name = institution.name
+
+    db.commit()
+    db.refresh(_institution)
+    return _institution
+
+
+def remove_institution(db: Session, institution_id: int):
+    _institution = get_institution_by_id(
+        db=db, institution_id=institution_id)
+    db.delete(_institution)
     db.commit()

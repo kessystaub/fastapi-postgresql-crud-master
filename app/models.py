@@ -46,8 +46,8 @@ class Formation(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     course = Column(String(255))
-    institution = Column(String(255))
     date = Column(String(255))
+    institution_id = Column(Integer, ForeignKey("institution.id"))
 
 
 class Experience(Base):
@@ -123,6 +123,13 @@ class UserHardskill(Base):
 
 class Position(Base):
     __tablename__ = "position"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255))
+
+
+class Institution(Base):
+    __tablename__ = "institution"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255))

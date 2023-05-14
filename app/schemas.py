@@ -70,8 +70,8 @@ class RequestHardskill(BaseModel):
 class FormationSchema(BaseModel):
     id: Optional[int] = None
     course: str
-    institution: str
     date: str
+    institution_id: int
 
 
 class RequestFormation(BaseModel):
@@ -170,3 +170,12 @@ class PositionSchema(BaseModel):
 
 class RequestPosition(BaseModel):
     parameter: PositionSchema = Field(...)
+
+
+class InstitutionSchema(BaseModel):
+    id: Optional[int] = None
+    name: str
+
+
+class RequestInstitution(BaseModel):
+    parameter: InstitutionSchema = Field(...)
