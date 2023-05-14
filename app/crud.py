@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import City, User
+from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill
 from schemas import CitySchema
 
 import schemas
@@ -66,11 +66,11 @@ def update_user(db: Session, user_id: int, user: schemas.UserSchema):
     _user.email: user.email
     _user.phone: user.phone
     _user.address: user.address
-    # _user.city_id: user.city_id
-    # _user.hardskill_id: user.hardskill_id
-    # _user.softskill_id: user.softskill_id
-    # _user.formation_id: user.formation_id
-    # _user.experience_id: user.experience_id
+    _user.city_id: user.city_id
+    _user.hardskill_id: user.hardskill_id
+    _user.softskill_id: user.softskill_id
+    _user.formation_id: user.formation_id
+    _user.experience_id: user.experience_id
 
     db.commit()
     db.refresh(_user)
@@ -80,4 +80,374 @@ def update_user(db: Session, user_id: int, user: schemas.UserSchema):
 def remove_user(db: Session, user_id: int):
     _user = get_user_by_id(db=db, user_id=user_id)
     db.delete(_user)
+    db.commit()
+
+# softskill
+
+
+def get_softskill(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Softskill).offset(skip).limit(limit).all()
+
+
+def get_softskill_by_id(db: Session, softskill_id: int):
+    return db.query(Softskill).filter(Softskill.id == softskill_id).first()
+
+
+def create_softskill(db: Session, softskill: schemas.SoftskillSchema):
+    db_softskill = models.Softskill(**softskill.dict())
+    db.add(db_softskill)
+    db.commit()
+    db.refresh(db_softskill)
+    return db_softskill
+
+
+def update_softskill(db: Session, softskill_id: int, softskill: schemas.SoftskillSchema):
+    _softskill = get_softskill_by_id(db=db, softskill_id=softskill_id)
+
+    _softskill.name = softskill.name
+
+    db.commit()
+    db.refresh(_softskill)
+    return _softskill
+
+
+def remove_softskill(db: Session, softskill_id: int):
+    _softskill = get_softskill_by_id(db=db, softskill_id=softskill_id)
+    db.delete(_softskill)
+    db.commit()
+
+
+# hardskill
+
+
+def get_hardskill(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Hardskill).offset(skip).limit(limit).all()
+
+
+def get_hardskill_by_id(db: Session, hardskill_id: int):
+    return db.query(Hardskill).filter(Hardskill.id == hardskill_id).first()
+
+
+def create_hardskill(db: Session, hardskill: schemas.HardskillSchema):
+    db_hardskill = models.Hardskill(**hardskill.dict())
+    db.add(db_hardskill)
+    db.commit()
+    db.refresh(db_hardskill)
+    return db_hardskill
+
+
+def update_hardskill(db: Session, hardskill_id: int, hardskill: schemas.HardskillSchema):
+    _hardskill = get_hardskill_by_id(db=db, hardskill_id=hardskill_id)
+
+    _hardskill.name = hardskill.name
+
+    db.commit()
+    db.refresh(_hardskill)
+    return _hardskill
+
+
+def remove_hardskill(db: Session, hardskill_id: int):
+    _hardskill = get_hardskill_by_id(db=db, hardskill_id=hardskill_id)
+    db.delete(_hardskill)
+    db.commit()
+
+
+# formation
+
+
+def get_formation(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Formation).offset(skip).limit(limit).all()
+
+
+def get_formation_by_id(db: Session, formation_id: int):
+    return db.query(Formation).filter(Formation.id == formation_id).first()
+
+
+def create_formation(db: Session, formation: schemas.FormationSchema):
+    db_formation = models.Formation(**formation.dict())
+    db.add(db_formation)
+    db.commit()
+    db.refresh(db_formation)
+    return db_formation
+
+
+def update_formation(db: Session, formation_id: int, formation: schemas.FormationSchema):
+    _formation = get_formation_by_id(db=db, formation_id=formation_id)
+
+    _formation.curso = formation.curso
+    _formation.instituicao: formation.instituicao
+    _formation.periodo: formation.periodo
+
+    db.commit()
+    db.refresh(_formation)
+    return _formation
+
+
+def remove_formation(db: Session, formation_id: int):
+    _formation = get_formation_by_id(db=db, formation_id=formation_id)
+    db.delete(_formation)
+    db.commit()
+
+
+# experience
+
+
+def get_experience(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Experience).offset(skip).limit(limit).all()
+
+
+def get_experience_by_id(db: Session, experience_id: int):
+    return db.query(Experience).filter(Experience.id == experience_id).first()
+
+
+def create_experience(db: Session, experience: schemas.ExperienceSchema):
+    db_experience = models.Experience(**experience.dict())
+    db.add(db_experience)
+    db.commit()
+    db.refresh(db_experience)
+    return db_experience
+
+
+def update_experience(db: Session, experience_id: int, experience: schemas.ExperienceSchema):
+    _experience = get_experience_by_id(db=db, experience_id=experience_id)
+
+    _experience.cargo = experience.cargo
+    _experience.empresa: experience.empresa
+    _experience.periodo: experience.periodo
+
+    db.commit()
+    db.refresh(_experience)
+    return _experience
+
+
+def remove_experience(db: Session, experience_id: int):
+    _experience = get_experience_by_id(db=db, experience_id=experience_id)
+    db.delete(_experience)
+    db.commit()
+
+
+# company
+
+
+def get_company(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Company).offset(skip).limit(limit).all()
+
+
+def get_company_by_id(db: Session, company_id: int):
+    return db.query(Company).filter(Company.id == company_id).first()
+
+
+def create_company(db: Session, company: schemas.CompanySchema):
+    db_company = models.Company(**company.dict())
+    db.add(db_company)
+    db.commit()
+    db.refresh(db_company)
+    return db_company
+
+
+def update_company(db: Session, company_id: int, company: schemas.CompanySchema):
+    _company = get_company_by_id(db=db, company_id=company_id)
+
+    _company.name = company.name
+    _company.description: company.description
+    _company.cnpj: company.cnpj
+    _company.password: company.password
+    _company.email: company.email
+    _company.phone_number: company.phone_number
+    _company.address: company.address
+    _company.city_id: company.city_id
+    _company.joboffer_id: company.joboffer_id
+
+    db.commit()
+    db.refresh(_company)
+    return _company
+
+
+def remove_company(db: Session, company_id: int):
+    _company = get_company_by_id(db=db, company_id=company_id)
+    db.delete(_company)
+    db.commit()
+
+# Joboffer
+
+
+def get_joboffer(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Joboffer).offset(skip).limit(limit).all()
+
+
+def get_joboffer_by_id(db: Session, joboffer_id: int):
+    return db.query(Joboffer).filter(Joboffer.id == joboffer_id).first()
+
+
+def create_joboffer(db: Session, joboffer: schemas.JobofferSchema):
+    db_joboffer = models.Joboffer(**joboffer.dict())
+    db.add(db_joboffer)
+    db.commit()
+    db.refresh(db_joboffer)
+    return db_joboffer
+
+
+def update_joboffer(db: Session, joboffer_id: int, joboffer: schemas.JobofferSchema):
+    _joboffer = get_joboffer_by_id(db=db, joboffer_id=joboffer_id)
+
+    _joboffer.code = joboffer.code
+    _joboffer.name: joboffer.name
+    _joboffer.description: joboffer.description
+    _joboffer.company: joboffer.company
+    _joboffer.city_id: joboffer.city_id
+
+    db.commit()
+    db.refresh(_joboffer)
+    return _joboffer
+
+
+def remove_joboffer(db: Session, joboffer_id: int):
+    _joboffer = get_joboffer_by_id(db=db, joboffer_id=joboffer_id)
+    db.delete(_joboffer)
+    db.commit()
+
+# Application
+
+
+def get_application(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Application).offset(skip).limit(limit).all()
+
+
+def get_application_by_id(db: Session, application_id: int):
+    return db.query(Application).filter(Application.id == application_id).first()
+
+
+def create_application(db: Session, application: schemas.ApplicationSchema):
+    db_application = models.Application(**application.dict())
+    db.add(db_application)
+    db.commit()
+    db.refresh(db_application)
+    return db_application
+
+
+def update_application(db: Session, application_id: int, application: schemas.ApplicationSchema):
+    _application = get_application_by_id(db=db, application_id=application_id)
+
+    _application.status_id = application.status_id
+    _application.joboffer_id: application.joboffer_id
+    _application.user_id: application.user_id
+
+    db.commit()
+    db.refresh(_application)
+    return _application
+
+
+def remove_application(db: Session, application_id: int):
+    _application = get_application_by_id(db=db, application_id=application_id)
+    db.delete(_application)
+    db.commit()
+
+# Status
+
+
+def get_status(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Status).offset(skip).limit(limit).all()
+
+
+def get_status_by_id(db: Session, status_id: int):
+    return db.query(Status).filter(Status.id == status_id).first()
+
+
+def create_status(db: Session, status: schemas.StatusSchema):
+    db_status = models.Status(**status.dict())
+    db.add(db_status)
+    db.commit()
+    db.refresh(db_status)
+    return db_status
+
+
+def update_status(db: Session, status_id: int, status: schemas.StatusSchema):
+    _status = get_status_by_id(db=db, status_id=status_id)
+
+    _status.status = status.status
+
+    db.commit()
+    db.refresh(_status)
+    return _status
+
+
+def remove_status(db: Session, status_id: int):
+    _status = get_status_by_id(db=db, status_id=status_id)
+    db.delete(_status)
+    db.commit()
+
+
+# UserSoftskill
+
+
+def get_user_softskill(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(UserSoftskill).offset(skip).limit(limit).all()
+
+
+def get_user_softskill_by_id(db: Session, user_softskill_id: int):
+    return db.query(UserSoftskill).filter(UserSoftskill.id == user_softskill_id).first()
+
+
+def create_user_softskill(db: Session, user_softskill: schemas.UserSoftskillSchema):
+    db_user_softskill = models.UserSoftskill(**user_softskill.dict())
+    db.add(db_user_softskill)
+    db.commit()
+    db.refresh(db_user_softskill)
+    return db_user_softskill
+
+
+def update_user_softskill(db: Session, user_softskill_id: int, user_softskill: schemas.UserSoftskillSchema):
+    _user_softskill = get_user_softskill_by_id(
+        db=db, user_softskill_id=user_softskill_id)
+
+    _user_softskill.user_id = user_softskill.user_id
+    _user_softskill.softskill_id = user_softskill.softskill_id
+
+    db.commit()
+    db.refresh(_user_softskill)
+    return _user_softskill
+
+
+def remove_user_softskill(db: Session, user_softskill_id: int):
+    _user_softskill = get_user_softskill_by_id(
+        db=db, user_softskill_id=user_softskill_id)
+    db.delete(_user_softskill)
+    db.commit()
+
+
+# UserHardskill
+
+
+def get_user_hardskill(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(UserHardskill).offset(skip).limit(limit).all()
+
+
+def get_user_hardskill_by_id(db: Session, user_hardskill_id: int):
+    return db.query(UserHardskill).filter(UserHardskill.id == user_hardskill_id).first()
+
+
+def create_user_hardskill(db: Session, user_hardskill: schemas.UserHardskillSchema):
+    db_user_hardskill = models.UserHardskill(**user_hardskill.dict())
+    db.add(db_user_hardskill)
+    db.commit()
+    db.refresh(db_user_hardskill)
+    return db_user_hardskill
+
+
+def update_user_hardskill(db: Session, user_hardskill_id: int, user_hardskill: schemas.UserHardskillSchema):
+    _user_hardskill = get_user_hardskill_by_id(
+        db=db, user_hardskill_id=user_hardskill_id)
+
+    _user_hardskill.user_id = user_hardskill.user_id
+    _user_hardskill.hardskill_id = user_hardskill.hardskill_id
+
+    db.commit()
+    db.refresh(_user_hardskill)
+    return _user_hardskill
+
+
+def remove_user_hardskill(db: Session, user_hardskill_id: int):
+    _user_hardskill = get_user_hardskill_by_id(
+        db=db, user_hardskill_id=user_hardskill_id)
+    db.delete(_user_hardskill)
     db.commit()
