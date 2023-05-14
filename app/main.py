@@ -1,19 +1,19 @@
 from fastapi import FastAPI
 import models
-from routes import router_city
-from routes_user import router_user
-from routes_softskill import router_softskill
-from routes_hardskill import router_hardskill
-from routes_formation import router_formation
-from routes_experience import router_experience
-from routes_company import router_company
-from routes_application import router_application
-from routes_joboffer import router_joboffer
-from routes_status import router_status
-from routes_user_hardskill import router_user_hardskill
-from routes_user_softskill import router_user_softskill
-from routes_position import router_position
-from routes_institution import router_institution
+from routes.routes_city import router_city
+from routes.routes_user import router_user
+from routes.routes_softskill import router_softskill
+from routes.routes_hardskill import router_hardskill
+from routes.routes_formation import router_formation
+from routes.routes_experience import router_experience
+from routes.routes_company import router_company
+from routes.routes_application import router_application
+from routes.routes_joboffer import router_joboffer
+from routes.routes_status import router_status
+from routes.routes_user_hardskill import router_user_hardskill
+from routes.routes_user_softskill import router_user_softskill
+from routes.routes_position import router_position
+from routes.routes_institution import router_institution
 from config import engine
 
 models.Base.metadata.create_all(bind=engine)
