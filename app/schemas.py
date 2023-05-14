@@ -1,4 +1,4 @@
-from typing import List, Optional, Generic, TypeVar
+from typing import Optional, Generic, TypeVar
 from pydantic import BaseModel, Field
 from pydantic.generics import GenericModel
 
@@ -36,10 +36,11 @@ class UserSchema(BaseModel):
     password: str
     email: str
     phone: str
+    address_number: str
+    address_neighborhood: str
     address: str
+    address_complement: str
     city_id: int
-    hardskill_id: int
-    softskill_id: int
     formation_id: int
     experience_id: int
 
@@ -116,9 +117,11 @@ class CompanySchema(BaseModel):
     password: str
     email: str
     phone_number: str
+    address_number: str
+    address_neighborhood: str
     address: str
+    address_complement: str
     city_id: int
-    joboffer_id: int
 
 
 class RequestCompany(BaseModel):
@@ -130,8 +133,8 @@ class JobofferSchema(BaseModel):
     code: int
     name: str
     description: str
-    company: str
     city_id: int
+    company_id: int
 
 
 class RequestJoboffer(BaseModel):
@@ -140,6 +143,7 @@ class RequestJoboffer(BaseModel):
 
 class ApplicationSchema(BaseModel):
     id: Optional[int] = None
+    date: str
     status_id: int
     joboffer_id: int
     user_id: int

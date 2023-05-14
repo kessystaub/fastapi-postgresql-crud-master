@@ -66,9 +66,10 @@ def update_user(db: Session, user_id: int, user: schemas.UserSchema):
     _user.email: user.email
     _user.phone: user.phone
     _user.address: user.address
+    _user.address_number: user.address_number
+    _user.address_complement: user.address_complement
+    _user.address_neighborhood: user.address_neighborhood
     _user.city_id: user.city_id
-    _user.hardskill_id: user.hardskill_id
-    _user.softskill_id: user.softskill_id
     _user.formation_id: user.formation_id
     _user.experience_id: user.experience_id
 
@@ -255,8 +256,10 @@ def update_company(db: Session, company_id: int, company: schemas.CompanySchema)
     _company.email: company.email
     _company.phone_number: company.phone_number
     _company.address: company.address
+    _company.address_number: company.address_number
+    _company.address_complement: company.address_complement
+    _company.address_neighborhood: company.address_neighborhood
     _company.city_id: company.city_id
-    _company.joboffer_id: company.joboffer_id
 
     db.commit()
     db.refresh(_company)
@@ -293,8 +296,8 @@ def update_joboffer(db: Session, joboffer_id: int, joboffer: schemas.JobofferSch
     _joboffer.code = joboffer.code
     _joboffer.name: joboffer.name
     _joboffer.description: joboffer.description
-    _joboffer.company: joboffer.company
     _joboffer.city_id: joboffer.city_id
+    _joboffer.company_id: joboffer.company_id
 
     db.commit()
     db.refresh(_joboffer)
@@ -328,6 +331,7 @@ def create_application(db: Session, application: schemas.ApplicationSchema):
 def update_application(db: Session, application_id: int, application: schemas.ApplicationSchema):
     _application = get_application_by_id(db=db, application_id=application_id)
 
+    _application.date = application.date
     _application.status_id = application.status_id
     _application.joboffer_id: application.joboffer_id
     _application.user_id: application.user_id

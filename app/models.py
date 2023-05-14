@@ -19,9 +19,10 @@ class User(Base):
     email = Column(String(100))
     phone = Column(String(11))
     address = Column(String(255))
+    address_number = Column(String(5))
+    address_neighborhood = Column(String(255))
+    address_complement = Column(String(255))
     city_id = Column(Integer, ForeignKey("city.id"))
-    hardskill_id = Column(Integer, ForeignKey("hardskill.id"))
-    softskill_id = Column(Integer, ForeignKey("softskill.id"))
     formation_id = Column(Integer, ForeignKey("formation.id"))
     experience_id = Column(Integer, ForeignKey("experience.id"))
 
@@ -69,8 +70,10 @@ class Company(Base):
     email = Column(String(100))
     phone_number = Column(String(11))
     address = Column(String(255))
+    address_number = Column(String(5))
+    address_neighborhood = Column(String(255))
+    address_complement = Column(String(255))
     city_id = Column(Integer, ForeignKey("city.id"))
-    joboffer_id = Column(Integer, ForeignKey("joboffer.id"))
 
 
 class Joboffer(Base):
@@ -80,14 +83,15 @@ class Joboffer(Base):
     code = Column(String(10))
     name = Column(String(100))
     description = Column(String(255))
-    company = Column(String(100))
     city_id = Column(Integer, ForeignKey("city.id"))
+    company_id = Column(Integer, ForeignKey("company.id"))
 
 
 class Application(Base):
     __tablename__ = "application"
 
     id = Column(Integer, primary_key=True, index=True)
+    date = Column(String(100))
     status_id = Column(Integer, ForeignKey("status.id"))
     joboffer_id = Column(Integer, ForeignKey("joboffer.id"))
     user_id = Column(Integer, ForeignKey("user.id"))
