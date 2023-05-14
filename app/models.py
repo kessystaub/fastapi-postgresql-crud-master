@@ -45,18 +45,18 @@ class Formation(Base):
     __tablename__ = "formation"
 
     id = Column(Integer, primary_key=True, index=True)
-    curso = Column(String(255))
-    instituicao = Column(String(255))
-    periodo = Column(String(255))
+    course = Column(String(255))
+    institution = Column(String(255))
+    date = Column(String(255))
 
 
 class Experience(Base):
     __tablename__ = "experience"
 
     id = Column(Integer, primary_key=True, index=True)
-    cargo = Column(String(255))
-    empresa = Column(String(255))
-    periodo = Column(String(255))
+    company = Column(String(255))
+    date = Column(String(255))
+    position_id = Column(Integer, ForeignKey("position.id"))
 
 
 class Company(Base):
@@ -85,6 +85,7 @@ class Joboffer(Base):
     description = Column(String(255))
     city_id = Column(Integer, ForeignKey("city.id"))
     company_id = Column(Integer, ForeignKey("company.id"))
+    position_id = Column(Integer, ForeignKey("position.id"))
 
 
 class Application(Base):
@@ -118,3 +119,10 @@ class UserHardskill(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     hardskill_id = Column(Integer, ForeignKey("hardskill.id"))
+
+
+class Position(Base):
+    __tablename__ = "position"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255))

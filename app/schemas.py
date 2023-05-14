@@ -69,9 +69,9 @@ class RequestHardskill(BaseModel):
 
 class FormationSchema(BaseModel):
     id: Optional[int] = None
-    curso: str
-    instituicao: str
-    periodo: str
+    course: str
+    institution: str
+    date: str
 
 
 class RequestFormation(BaseModel):
@@ -80,9 +80,9 @@ class RequestFormation(BaseModel):
 
 class ExperienceSchema(BaseModel):
     id: Optional[int] = None
-    cargo: str
-    empresa: str
-    periodo: str
+    company: str
+    date: str
+    position_id: int
 
 
 class RequestExperience(BaseModel):
@@ -135,6 +135,7 @@ class JobofferSchema(BaseModel):
     description: str
     city_id: int
     company_id: int
+    position_id: int
 
 
 class RequestJoboffer(BaseModel):
@@ -160,3 +161,12 @@ class StatusSchema(BaseModel):
 
 class RequestStatus(BaseModel):
     parameter: StatusSchema = Field(...)
+
+
+class PositionSchema(BaseModel):
+    id: Optional[int] = None
+    name: str
+
+
+class RequestPosition(BaseModel):
+    parameter: PositionSchema = Field(...)

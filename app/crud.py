@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill
+from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill, Position
 from schemas import CitySchema
 
 import schemas
@@ -175,9 +175,9 @@ def create_formation(db: Session, formation: schemas.FormationSchema):
 def update_formation(db: Session, formation_id: int, formation: schemas.FormationSchema):
     _formation = get_formation_by_id(db=db, formation_id=formation_id)
 
-    _formation.curso = formation.curso
-    _formation.instituicao: formation.instituicao
-    _formation.periodo: formation.periodo
+    _formation.course = formation.course
+    _formation.institution: formation.institution
+    _formation.date: formation.date
 
     db.commit()
     db.refresh(_formation)
@@ -212,9 +212,9 @@ def create_experience(db: Session, experience: schemas.ExperienceSchema):
 def update_experience(db: Session, experience_id: int, experience: schemas.ExperienceSchema):
     _experience = get_experience_by_id(db=db, experience_id=experience_id)
 
-    _experience.cargo = experience.cargo
-    _experience.empresa: experience.empresa
-    _experience.periodo: experience.periodo
+    _experience.company = experience.company
+    _experience.date: experience.date
+    _experience.position_id: experience.position_id
 
     db.commit()
     db.refresh(_experience)
@@ -298,6 +298,7 @@ def update_joboffer(db: Session, joboffer_id: int, joboffer: schemas.JobofferSch
     _joboffer.description: joboffer.description
     _joboffer.city_id: joboffer.city_id
     _joboffer.company_id: joboffer.company_id
+    _joboffer.position_id: joboffer.position_id
 
     db.commit()
     db.refresh(_joboffer)
@@ -454,4 +455,41 @@ def remove_user_hardskill(db: Session, user_hardskill_id: int):
     _user_hardskill = get_user_hardskill_by_id(
         db=db, user_hardskill_id=user_hardskill_id)
     db.delete(_user_hardskill)
+    db.commit()
+
+
+# Position
+
+
+def get_position(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Position).offset(skip).limit(limit).all()
+
+
+def get_position_by_id(db: Session, position_id: int):
+    return db.query(Position).filter(Position.id == position_id).first()
+
+
+def create_position(db: Session, position: schemas.PositionSchema):
+    db_position = models.Position(**position.dict())
+    db.add(db_position)
+    db.commit()
+    db.refresh(db_position)
+    return db_position
+
+
+def update_position(db: Session, position_id: int, position: schemas.PositionSchema):
+    _position = get_position_by_id(
+        db=db, position_id=position_id)
+
+    _position.name = position.name
+
+    db.commit()
+    db.refresh(_position)
+    return _position
+
+
+def remove_position(db: Session, position_id: int):
+    _position = get_position_by_id(
+        db=db, position_id=position_id)
+    db.delete(_position)
     db.commit()
