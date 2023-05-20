@@ -1,3 +1,4 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 import models
 from routes.routes_city import router_city
@@ -18,7 +19,20 @@ from config import engine
 
 models.Base.metadata.create_all(bind=engine)
 
+
 app = FastAPI()
+
+origins = [
+    '*'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(router_city, prefix="/city", tags=["city"])
 app.include_router(router_user, prefix="/user", tags=["user"])
