@@ -39,6 +39,12 @@ async def get_cities(city_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_cities)
 
 
+@router_city.get("/getCityByName/{city_name}")
+async def get_cities(city_name: str, db: Session = Depends(get_db)):
+    _cities = crud.get_city_by_name(db, city_name)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_cities)
+
+
 @router_city.patch("/{city_id}")
 async def update_city(city_id: int, request: RequestCity, db: Session = Depends(get_db)):
     _city = crud.update_city(db, city_id=city_id,

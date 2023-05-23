@@ -15,6 +15,10 @@ def get_city_by_id(db: Session, city_id: int):
     return db.query(City).filter(City.id == city_id).first()
 
 
+def get_city_by_name(db: Session, city_name: str):
+    return db.query(City).filter(City.name == city_name).first()
+
+
 def create_city(db: Session, city: CitySchema):
     _city = City(name=city.name, uf=city.uf)
     db.add(_city)
