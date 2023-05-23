@@ -397,6 +397,10 @@ def get_user_softskill_by_id(db: Session, user_softskill_id: int):
     return db.query(UserSoftskill).filter(UserSoftskill.id == user_softskill_id).first()
 
 
+def get_softskill_by_user_id(db: Session, user_id: int):
+    return db.query(UserSoftskill).filter(UserSoftskill.user_id == user_id).all()
+
+
 def create_user_softskill(db: Session, user_softskill: schemas.UserSoftskillSchema):
     db_user_softskill = models.UserSoftskill(**user_softskill.dict())
     db.add(db_user_softskill)
