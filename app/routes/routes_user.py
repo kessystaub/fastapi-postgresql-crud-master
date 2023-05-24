@@ -1,11 +1,14 @@
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, HTTPException, Path, Form
 from fastapi import Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import Request, Response, RequestCity, RequestUser, RequestUserUpdate
 from responses.user_response import UserResponse
+from security import verify_password, criar_token_jwt
+from models import User
 
 import crud
+
 
 router_user = APIRouter()
 
@@ -51,3 +54,16 @@ async def update_user(user_id: int, request: RequestUserUpdate, db: Session = De
 async def delete_user(user_id: int,  db: Session = Depends(get_db)):
     crud.remove_user(db, user_id=user_id)
     return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
+
+
+@router_user.post("/login")
+async def login(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, user_email=username)
+    if not user or not verify_password(password, user.hash_password):
+        raise HTTPException(status_code=403,
+                            detail="Email ou nome de usuário incorretos"
+                            )
+    return {
+        "access_token": criar_token_jwt(user.id),
+        "token_type": "bearer",
+    }
