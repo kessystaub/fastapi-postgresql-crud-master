@@ -15,8 +15,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100))
-    password = Column(String(255))
-    email = Column(String(100))
+    hash_password = Column(String(255))
+    email = Column(String(100), unique=True)
     phone = Column(String(11))
     address = Column(String(255))
     address_number = Column(String(5))

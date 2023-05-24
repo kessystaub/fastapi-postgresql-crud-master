@@ -1,6 +1,7 @@
 from typing import Optional, Generic, TypeVar
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from pydantic.generics import GenericModel
+from security import get_password_hash
 
 T = TypeVar('T')
 
@@ -33,7 +34,7 @@ class RequestCity(BaseModel):
 class UserSchema(BaseModel):
     id: Optional[int] = None
     name: str
-    password: str
+    hash_password: str = Field(alias='password')
     email: str
     phone: str
     address_number: str
@@ -44,9 +45,38 @@ class UserSchema(BaseModel):
     formation_id: int
     experience_id: int
 
+    @validator('hash_password', pre=True)
+    def hash_the_password(cls, v):
+        return get_password_hash(v)
+
 
 class RequestUser(BaseModel):
     parameter: UserSchema = Field(...)
+
+
+class UserUpdate(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str]
+    hash_password: Optional[str] = Field(alias='password')
+    email: Optional[str]
+    phone: Optional[str]
+    address_number: Optional[str]
+    address_neighborhood: Optional[str]
+    address: Optional[str]
+    address_complement: Optional[str]
+    city_id: Optional[int]
+    formation_id: Optional[int]
+    experience_id: Optional[int]
+
+    @validator('hash_password', pre=True)
+    def hash_the_password(cls, v):
+        if v:
+            return get_password_hash(v)
+        return v
+
+
+class RequestUserUpdate(BaseModel):
+    parameter: UserUpdate = Field(...)
 
 
 class SoftskillSchema(BaseModel):

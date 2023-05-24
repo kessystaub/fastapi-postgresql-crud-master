@@ -2,7 +2,8 @@ from fastapi import APIRouter, HTTPException, Path
 from fastapi import Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from schemas import Request, Response, RequestCity, RequestUser
+from schemas import Request, Response, RequestCity, RequestUser, RequestUserUpdate
+from responses.user_response import UserResponse
 
 import crud
 
@@ -40,7 +41,7 @@ async def get_users(user_id: int, db: Session = Depends(get_db)):
 
 
 @router_user.patch("/{user_id}")
-async def update_user(user_id: int, request: RequestUser, db: Session = Depends(get_db)):
+async def update_user(user_id: int, request: RequestUserUpdate, db: Session = Depends(get_db)):
     _user = crud.update_user(db, user_id=user_id,
                              user=request.parameter)
     return Response(status="Ok", code="200", message="Success update data", result=_user)
