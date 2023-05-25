@@ -57,13 +57,14 @@ async def delete_user(user_id: int,  db: Session = Depends(get_db)):
 
 
 @router_user.post("/login")
-async def login(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+async def login(username: str, password: str, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, user_email=username)
     if not user or not verify_password(password, user.hash_password):
         raise HTTPException(status_code=403,
                             detail="Email ou nome de usuário incorretos"
                             )
     return {
+        "user_id": user.id,
         "access_token": criar_token_jwt(user.id),
         "token_type": "bearer",
     }
