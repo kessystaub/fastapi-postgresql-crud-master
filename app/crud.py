@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill, Position, Institution
+from models import City, User, Softskill, Hardskill, Formation, Experience, Company, Joboffer, Status, Application, UserSoftskill, UserHardskill, Position, Institution, UserExperience, UserFormation
 from schemas import CitySchema
 
 import schemas
@@ -78,8 +78,6 @@ def update_user(db: Session, user_id: int, user: schemas.UserSchema):
     _user.address_complement: user.address_complement
     _user.address_neighborhood: user.address_neighborhood
     _user.city_id: user.city_id
-    _user.formation_id: user.formation_id
-    _user.experience_id: user.experience_id
 
     db.commit()
     db.refresh(_user)
@@ -431,6 +429,89 @@ def remove_user_softskill(db: Session, user_softskill_id: int):
     db.delete(_user_softskill)
     db.commit()
 
+
+# UserFormation
+
+
+def get_user_formation(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(UserFormation).offset(skip).limit(limit).all()
+
+
+def get_user_formation_by_id(db: Session, user_formation_id: int):
+    return db.query(UserFormation).filter(UserFormation.id == user_formation_id).first()
+
+
+def get_softskill_by_user_id(db: Session, user_id: int):
+    return db.query(UserFormation).filter(UserFormation.user_id == user_id).all()
+
+
+def create_user_formation(db: Session, user_formation: schemas.UserFormationSchema):
+    db_user_formation = models.UserFormation(**user_formation.dict())
+    db.add(db_user_formation)
+    db.commit()
+    db.refresh(db_user_formation)
+    return db_user_formation
+
+
+def update_user_formation(db: Session, user_formation_id: int, user_formation: schemas.UserFormationSchema):
+    _user_formation = get_user_formation_by_id(
+        db=db, user_formation_id=user_formation_id)
+
+    _user_formation.user_id = user_formation.user_id
+    _user_formation.softskill_id = user_formation.softskill_id
+
+    db.commit()
+    db.refresh(_user_formation)
+    return _user_formation
+
+
+def remove_user_formation(db: Session, user_formation_id: int):
+    _user_formation = get_user_formation_by_id(
+        db=db, user_formation_id=user_formation_id)
+    db.delete(_user_formation)
+    db.commit()
+
+
+# UserExperience
+
+
+def get_user_experience(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(UserExperience).offset(skip).limit(limit).all()
+
+
+def get_user_experience_by_id(db: Session, user_experience_id: int):
+    return db.query(UserExperience).filter(UserExperience.id == user_experience_id).first()
+
+
+def get_softskill_by_user_id(db: Session, user_id: int):
+    return db.query(UserExperience).filter(UserExperience.user_id == user_id).all()
+
+
+def create_user_experience(db: Session, user_experience: schemas.UserExperienceSchema):
+    db_user_experience = models.UserExperience(**user_experience.dict())
+    db.add(db_user_experience)
+    db.commit()
+    db.refresh(db_user_experience)
+    return db_user_experience
+
+
+def update_user_experience(db: Session, user_experience_id: int, user_experience: schemas.UserExperienceSchema):
+    _user_experience = get_user_experience_by_id(
+        db=db, user_experience_id=user_experience_id)
+
+    _user_experience.user_id = user_experience.user_id
+    _user_experience.softskill_id = user_experience.softskill_id
+
+    db.commit()
+    db.refresh(_user_experience)
+    return _user_experience
+
+
+def remove_user_experience(db: Session, user_experience_id: int):
+    _user_experience = get_user_experience_by_id(
+        db=db, user_experience_id=user_experience_id)
+    db.delete(_user_experience)
+    db.commit()
 
 # UserHardskill
 

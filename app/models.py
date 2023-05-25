@@ -23,8 +23,6 @@ class User(Base):
     address_neighborhood = Column(String(255))
     address_complement = Column(String(255))
     city_id = Column(Integer, ForeignKey("city.id"))
-    formation_id = Column(Integer, ForeignKey("formation.id"))
-    experience_id = Column(Integer, ForeignKey("experience.id"))
 
 
 class Softskill(Base):
@@ -111,6 +109,22 @@ class UserSoftskill(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     softskill_id = Column(Integer, ForeignKey("softskill.id"))
+
+
+class UserFormation(Base):
+    __tablename__ = "user_formation"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    formation_id = Column(Integer, ForeignKey("formation.id"))
+
+
+class UserExperience(Base):
+    __tablename__ = "user_experience"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    experience_id = Column(Integer, ForeignKey("experience.id"))
 
 
 class UserHardskill(Base):

@@ -15,6 +15,8 @@ from routes.routes_user_hardskill import router_user_hardskill
 from routes.routes_user_softskill import router_user_softskill
 from routes.routes_position import router_position
 from routes.routes_institution import router_institution
+from routes.routes_user_experience import router_user_experience
+from routes.routes_user_formation import router_user_formation
 from config import engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -50,6 +52,10 @@ app.include_router(router_user_hardskill,
                    prefix="/user_hardskill", tags=["user_hardskill"])
 app.include_router(router_user_softskill,
                    prefix="/user_softskill", tags=["user_softskill"])
+app.include_router(router_user_formation,
+                   prefix="/user_formation", tags=["user_formation"])
+app.include_router(router_user_experience,
+                   prefix="/user_experience", tags=["user_experience"])
 app.include_router(router_position,
                    prefix="/position", tags=["position"])
 app.include_router(router_institution,

@@ -42,8 +42,6 @@ class UserSchema(BaseModel):
     address: str
     address_complement: str
     city_id: int
-    formation_id: int
-    experience_id: int
 
     @validator('hash_password', pre=True)
     def hash_the_password(cls, v):
@@ -65,8 +63,6 @@ class UserUpdate(BaseModel):
     address: Optional[str]
     address_complement: Optional[str]
     city_id: Optional[int]
-    formation_id: Optional[int]
-    experience_id: Optional[int]
 
     @validator('hash_password', pre=True)
     def hash_the_password(cls, v):
@@ -127,6 +123,26 @@ class UserSoftskillSchema(BaseModel):
 
 class RequestUserSoftskill(BaseModel):
     parameter: UserSoftskillSchema = Field(...)
+
+
+class UserFormationSchema(BaseModel):
+    id: Optional[int] = None
+    user_id: int
+    formation_id: int
+
+
+class RequestUserFormation(BaseModel):
+    parameter: UserFormationSchema = Field(...)
+
+
+class UserExperienceSchema(BaseModel):
+    id: Optional[int] = None
+    user_id: int
+    experience_id: int
+
+
+class RequestUserExperience(BaseModel):
+    parameter: UserExperienceSchema = Field(...)
 
 
 class UserHardskillSchema(BaseModel):
