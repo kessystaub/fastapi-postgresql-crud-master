@@ -25,10 +25,12 @@ def get_db():
 
 @router_user.post("/")
 async def create_user_service(request: RequestUser, db: Session = Depends(get_db)):
-    crud.create_user(db, user=request.parameter)
-    return Response(status="Ok",
-                    code="200",
-                    message="User created successfully").dict(exclude_none=True)
+    user = crud.create_user(db, user=request.parameter)
+    return Response(
+        status="Ok",
+        code="200",
+        result=user.id,
+        message="User created successfully").dict(exclude_none=True)
 
 
 @router_user.get("/")

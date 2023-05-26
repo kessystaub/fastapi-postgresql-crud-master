@@ -403,6 +403,10 @@ def get_softskill_by_user_id(db: Session, user_id: int):
     return db.query(UserSoftskill).filter(UserSoftskill.user_id == user_id).all()
 
 
+def get_user_softskill_by_softskill_id(db: Session, user_id: int, softskill_id: int):
+    return db.query(UserSoftskill).filter((UserSoftskill.softskill_id == softskill_id) & (UserSoftskill.user_id == user_id)).first()
+
+
 def create_user_softskill(db: Session, user_softskill: schemas.UserSoftskillSchema):
     db_user_softskill = models.UserSoftskill(**user_softskill.dict())
     db.add(db_user_softskill)
@@ -430,6 +434,13 @@ def remove_user_softskill(db: Session, user_softskill_id: int):
     db.commit()
 
 
+def remove_user_softskill_by_user(db: Session, user_id: int, softskill_id: int):
+    _user_softskill = get_user_softskill_by_softskill_id(
+        db=db, user_id=user_id, softskill_id=softskill_id)
+    db.delete(_user_softskill)
+    db.commit()
+
+
 # UserFormation
 
 
@@ -441,7 +452,7 @@ def get_user_formation_by_id(db: Session, user_formation_id: int):
     return db.query(UserFormation).filter(UserFormation.id == user_formation_id).first()
 
 
-def get_softskill_by_user_id(db: Session, user_id: int):
+def get_formation_by_user_id(db: Session, user_id: int):
     return db.query(UserFormation).filter(UserFormation.user_id == user_id).all()
 
 
@@ -483,7 +494,7 @@ def get_user_experience_by_id(db: Session, user_experience_id: int):
     return db.query(UserExperience).filter(UserExperience.id == user_experience_id).first()
 
 
-def get_softskill_by_user_id(db: Session, user_id: int):
+def get_experience_by_user_id(db: Session, user_id: int):
     return db.query(UserExperience).filter(UserExperience.user_id == user_id).all()
 
 
