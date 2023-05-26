@@ -59,6 +59,13 @@ async def delete_user_softskill(user_softskill_id: int,  db: Session = Depends(g
     return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
 
 
+@router_user_softskill.get("/getByUserAndSoftskill/{user_id}/{softskill_id}")
+async def get_user_softskills(user_id: int, softskill_id: int, db: Session = Depends(get_db)):
+    _user_softskills = crud.get_user_softskill_by_softskill_id(
+        db, user_id, softskill_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_user_softskills)
+
+
 @router_user_softskill.delete("/deleteByUser/{user_id}/{softskill_id}")
 async def delete_user_softskill(user_id: int, softskill_id: int,  db: Session = Depends(get_db)):
     crud.remove_user_softskill_by_user(

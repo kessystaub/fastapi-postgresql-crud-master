@@ -100,6 +100,10 @@ def get_softskill_by_id(db: Session, softskill_id: int):
     return db.query(Softskill).filter(Softskill.id == softskill_id).first()
 
 
+def get_softskill_by_name(db: Session, softskill_name: str):
+    return db.query(Softskill).filter(Softskill.name == softskill_name).first()
+
+
 def create_softskill(db: Session, softskill: schemas.SoftskillSchema):
     db_softskill = models.Softskill(**softskill.dict())
     db.add(db_softskill)
