@@ -21,9 +21,10 @@ def get_db():
 
 @router_formation.post("/")
 async def create_formation_service(request: RequestFormation, db: Session = Depends(get_db)):
-    crud.create_formation(db, formation=request.parameter)
+    _formation = crud.create_formation(db, formation=request.parameter)
     return Response(status="Ok",
                     code="200",
+                    result=_formation,
                     message="Formation created successfully").dict(exclude_none=True)
 
 

@@ -56,3 +56,10 @@ async def update_user_formation(user_formation_id: int, request: RequestUserForm
 async def delete_user_formation(user_formation_id: int,  db: Session = Depends(get_db)):
     crud.remove_user_formation(db, user_formation_id=user_formation_id)
     return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
+
+
+@router_user_formation.delete("/deleteByUser/{user_id}/{formation_id}")
+async def delete_user_formation(user_id: int, formation_id: int,  db: Session = Depends(get_db)):
+    crud.remove_user_formation_by_user(
+        db, user_id=user_id, formation_id=formation_id)
+    return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)

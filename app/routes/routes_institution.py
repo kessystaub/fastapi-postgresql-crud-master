@@ -33,6 +33,12 @@ async def get_institutions(skip: int = 0, limit: int = 100, db: Session = Depend
     return Response(status="Ok", code="200", message="Success fetch all data", result=_institutions)
 
 
+@router_institution.get("/getByName/{institution_name}")
+async def get_institutions(institution_name: str, db: Session = Depends(get_db)):
+    _institutions = crud.get_institution_by_name(db, institution_name)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_institutions)
+
+
 @router_institution.get("/{institution_id}")
 async def get_institutions(institution_id: int, db: Session = Depends(get_db)):
     _institutions = crud.get_institution_by_id(db, institution_id)

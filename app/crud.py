@@ -460,6 +460,10 @@ def get_user_formation_by_id(db: Session, user_formation_id: int):
     return db.query(UserFormation).filter(UserFormation.id == user_formation_id).first()
 
 
+def get_user_formation_by_formation_id(db: Session, user_id: int, formation_id: int):
+    return db.query(UserFormation).filter((UserFormation.formation_id == formation_id) & (UserFormation.user_id == user_id)).first()
+
+
 def get_formation_by_user_id(db: Session, user_id: int):
     return db.query(UserFormation).filter(UserFormation.user_id == user_id).all()
 
@@ -477,7 +481,7 @@ def update_user_formation(db: Session, user_formation_id: int, user_formation: s
         db=db, user_formation_id=user_formation_id)
 
     _user_formation.user_id = user_formation.user_id
-    _user_formation.softskill_id = user_formation.softskill_id
+    _user_formation.formation_id = user_formation.formation_id
 
     db.commit()
     db.refresh(_user_formation)
@@ -487,6 +491,13 @@ def update_user_formation(db: Session, user_formation_id: int, user_formation: s
 def remove_user_formation(db: Session, user_formation_id: int):
     _user_formation = get_user_formation_by_id(
         db=db, user_formation_id=user_formation_id)
+    db.delete(_user_formation)
+    db.commit()
+
+
+def remove_user_formation_by_user(db: Session, user_id: int, formation_id: int):
+    _user_formation = get_user_formation_by_formation_id(
+        db=db, user_id=user_id, formation_id=formation_id)
     db.delete(_user_formation)
     db.commit()
 
@@ -631,6 +642,10 @@ def get_institution(db: Session, skip: int = 0, limit: int = 100):
 
 def get_institution_by_id(db: Session, institution_id: int):
     return db.query(Institution).filter(Institution.id == institution_id).first()
+
+
+def get_institution_by_name(db: Session, institution_name: str):
+    return db.query(Institution).filter(Institution.name == institution_name).first()
 
 
 def create_institution(db: Session, institution: schemas.InstitutionSchema):
