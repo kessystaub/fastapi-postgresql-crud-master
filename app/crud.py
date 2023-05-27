@@ -335,6 +335,10 @@ def get_application_by_id(db: Session, application_id: int):
     return db.query(Application).filter(Application.id == application_id).first()
 
 
+def get_application_by_user_id(db: Session, user_id: int):
+    return db.query(Application).filter(Application.user_id == user_id).all()
+
+
 def create_application(db: Session, application: schemas.ApplicationSchema):
     db_application = models.Application(**application.dict())
     db.add(db_application)

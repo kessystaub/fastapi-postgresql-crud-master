@@ -33,6 +33,12 @@ async def get_applications(skip: int = 0, limit: int = 100, db: Session = Depend
     return Response(status="Ok", code="200", message="Success fetch all data", result=_applications)
 
 
+@router_application.get("/getByUser/{user_id}")
+async def get_applications(user_id: int, db: Session = Depends(get_db)):
+    _applications = crud.get_application_by_user_id(db, user_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_applications)
+
+
 @router_application.get("/{application_id}")
 async def get_applications(application_id: int, db: Session = Depends(get_db)):
     _applications = crud.get_application_by_id(db, application_id)

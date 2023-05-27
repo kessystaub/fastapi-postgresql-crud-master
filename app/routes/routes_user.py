@@ -100,10 +100,12 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
     experiences = []
     softskills = []
     hardskills = []
+    applications = []
     softskill = crud.get_softskill_by_user_id(db, user.id)
     hardskill = crud.get_hardskill_by_user_id(db, user.id)
     experience = crud.get_experience_by_user_id(db, user.id)
     formation = crud.get_formation_by_user_id(db, user.id)
+    application = crud.get_application_by_user_id(db, user.id)
     for item in formation:
         formations.append(crud.get_formation_by_id(
             db, formation_id=item.formation_id))
@@ -126,6 +128,7 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
         "experiences": experiences,
         "softskills": softskills,
         "hardskills": hardskills,
+        "applications": application,
         "access_token": criar_token_jwt(user.id),
         "token_type": "bearer",
     }
