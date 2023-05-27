@@ -54,15 +54,15 @@ class RequestUser(BaseModel):
 
 class UserUpdate(BaseModel):
     id: Optional[int] = None
-    name: Optional[str]
-    hash_password: Optional[str] = Field(alias='password')
-    email: Optional[str]
-    phone: Optional[str]
-    address_number: Optional[str]
-    address_neighborhood: Optional[str]
-    address: Optional[str]
-    address_complement: Optional[str]
-    city_id: Optional[int]
+    name: Optional[str] = None
+    hash_password: Optional[str] = Field(alias='password', default=None)
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address_number: Optional[str] = None
+    address_neighborhood: Optional[str] = None
+    address: Optional[str] = None
+    address_complement: Optional[str] = None
+    city_id: Optional[int] = None
 
     @validator('hash_password', pre=True)
     def hash_the_password(cls, v):

@@ -26,11 +26,41 @@ def get_db():
 @router_user.post("/")
 async def create_user_service(request: RequestUser, db: Session = Depends(get_db)):
     user = crud.create_user(db, user=request.parameter)
-    return Response(
-        status="Ok",
-        code="200",
-        result=user.id,
-        message="User created successfully").dict(exclude_none=True)
+
+    formations = []
+    experiences = []
+    softskills = []
+    hardskills = []
+    softskill = crud.get_softskill_by_user_id(db, user.id)
+    hardskill = crud.get_hardskill_by_user_id(db, user.id)
+    experience = crud.get_experience_by_user_id(db, user.id)
+    formation = crud.get_formation_by_user_id(db, user.id)
+    for item in formation:
+        formations.append(crud.get_formation_by_id(
+            db, formation_id=item.formation_id))
+
+    for item in experience:
+        experiences.append(crud.get_experience_by_id(
+            db, experience_id=item.experience_id))
+
+    for item in softskill:
+        softskills.append(crud.get_softskill_by_id(
+            db, softskill_id=item.softskill_id))
+
+    for item in hardskill:
+        hardskills.append(crud.get_hardskill_by_id(
+            db, hardskill_id=item.hardskill_id))
+
+    return {
+        "user": user,
+        "formations": formations,
+        "experiences": experiences,
+        "softskills": softskills,
+        "hardskills": hardskills,
+        "status": "Ok",
+        "code": "200",
+        "message": "User created successfully"
+    }
 
 
 @router_user.get("/")
@@ -65,8 +95,37 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=403,
                             detail="Email ou nome de usuário incorretos"
                             )
+
+    formations = []
+    experiences = []
+    softskills = []
+    hardskills = []
+    softskill = crud.get_softskill_by_user_id(db, user.id)
+    hardskill = crud.get_hardskill_by_user_id(db, user.id)
+    experience = crud.get_experience_by_user_id(db, user.id)
+    formation = crud.get_formation_by_user_id(db, user.id)
+    for item in formation:
+        formations.append(crud.get_formation_by_id(
+            db, formation_id=item.formation_id))
+
+    for item in experience:
+        experiences.append(crud.get_experience_by_id(
+            db, experience_id=item.experience_id))
+
+    for item in softskill:
+        softskills.append(crud.get_softskill_by_id(
+            db, softskill_id=item.softskill_id))
+
+    for item in hardskill:
+        hardskills.append(crud.get_hardskill_by_id(
+            db, hardskill_id=item.hardskill_id))
+
     return {
-        "user_id": user.id,
+        "user": user,
+        "formations": formations,
+        "experiences": experiences,
+        "softskills": softskills,
+        "hardskills": hardskills,
         "access_token": criar_token_jwt(user.id),
         "token_type": "bearer",
     }
