@@ -56,3 +56,10 @@ async def update_user_experience(user_experience_id: int, request: RequestUserEx
 async def delete_user_experience(user_experience_id: int,  db: Session = Depends(get_db)):
     crud.remove_user_experience(db, user_experience_id=user_experience_id)
     return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
+
+
+@router_user_experience.delete("/deleteByUser/{user_id}/{experience_id}")
+async def delete_user_experience(user_id: int, experience_id: int,  db: Session = Depends(get_db)):
+    crud.remove_user_experience_by_user(
+        db, user_id=user_id, experience_id=experience_id)
+    return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)

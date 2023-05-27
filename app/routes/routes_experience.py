@@ -21,9 +21,10 @@ def get_db():
 
 @router_experience.post("/")
 async def create_experience_service(request: RequestExperience, db: Session = Depends(get_db)):
-    crud.create_experience(db, experience=request.parameter)
+    _experience = crud.create_experience(db, experience=request.parameter)
     return Response(status="Ok",
                     code="200",
+                    result=_experience,
                     message="Experience created successfully").dict(exclude_none=True)
 
 

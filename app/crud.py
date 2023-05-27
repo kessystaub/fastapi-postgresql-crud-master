@@ -513,6 +513,10 @@ def get_user_experience_by_id(db: Session, user_experience_id: int):
     return db.query(UserExperience).filter(UserExperience.id == user_experience_id).first()
 
 
+def get_user_experience_by_experience_id(db: Session, user_id: int, experience_id: int):
+    return db.query(UserExperience).filter((UserExperience.experience_id == experience_id) & (UserExperience.user_id == user_id)).first()
+
+
 def get_experience_by_user_id(db: Session, user_id: int):
     return db.query(UserExperience).filter(UserExperience.user_id == user_id).all()
 
@@ -530,11 +534,18 @@ def update_user_experience(db: Session, user_experience_id: int, user_experience
         db=db, user_experience_id=user_experience_id)
 
     _user_experience.user_id = user_experience.user_id
-    _user_experience.softskill_id = user_experience.softskill_id
+    _user_experience.experience_id = user_experience.experience_id
 
     db.commit()
     db.refresh(_user_experience)
     return _user_experience
+
+
+def remove_user_experience_by_user(db: Session, user_id: int, experience_id: int):
+    _user_experience = get_user_experience_by_experience_id(
+        db=db, user_id=user_id, experience_id=experience_id)
+    db.delete(_user_experience)
+    db.commit()
 
 
 def remove_user_experience(db: Session, user_experience_id: int):
