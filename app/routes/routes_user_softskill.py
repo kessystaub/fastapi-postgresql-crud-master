@@ -42,7 +42,6 @@ async def get_user_softskills(user_softskill_id: int, db: Session = Depends(get_
 @router_user_softskill.get("/getSoftskillsByUserId/{user_id}")
 async def get_user_softskills(user_id: int, db: Session = Depends(get_db)):
     _user_softskills = crud.get_softskill_by_user_id(db, user_id)
-    print('aaaaaaaaaaaaaaaaaaaa', _user_softskills)
     return Response(status="Ok", code="200", message="Success fetch all data", result=_user_softskills)
 
 

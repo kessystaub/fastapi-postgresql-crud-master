@@ -39,6 +39,12 @@ async def get_hardskills(hardskill_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_hardskills)
 
 
+@router_hardskill.get("/getByName/{hardskill_name}")
+async def get_hardskills(hardskill_name: str, db: Session = Depends(get_db)):
+    _hardskills = crud.get_hardskill_by_name(db, hardskill_name)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_hardskills)
+
+
 @router_hardskill.patch("/{hardskill_id}")
 async def update_hardskill(hardskill_id: int, request: RequestHardskill, db: Session = Depends(get_db)):
     _hardskill = crud.update_hardskill(db, hardskill_id=hardskill_id,

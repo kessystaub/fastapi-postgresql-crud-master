@@ -139,6 +139,10 @@ def get_hardskill_by_id(db: Session, hardskill_id: int):
     return db.query(Hardskill).filter(Hardskill.id == hardskill_id).first()
 
 
+def get_hardskill_by_name(db: Session, hardskill_name: str):
+    return db.query(Hardskill).filter(Hardskill.name == hardskill_name).first()
+
+
 def create_hardskill(db: Session, hardskill: schemas.HardskillSchema):
     db_hardskill = models.Hardskill(**hardskill.dict())
     db.add(db_hardskill)
@@ -539,6 +543,14 @@ def get_user_hardskill_by_id(db: Session, user_hardskill_id: int):
     return db.query(UserHardskill).filter(UserHardskill.id == user_hardskill_id).first()
 
 
+def get_hardskill_by_user_id(db: Session, user_id: int):
+    return db.query(UserHardskill).filter(UserHardskill.user_id == user_id).all()
+
+
+def get_user_hardskill_by_hardskill_id(db: Session, user_id: int, hardskill_id: int):
+    return db.query(UserHardskill).filter((UserHardskill.hardskill_id == hardskill_id) & (UserHardskill.user_id == user_id)).first()
+
+
 def create_user_hardskill(db: Session, user_hardskill: schemas.UserHardskillSchema):
     db_user_hardskill = models.UserHardskill(**user_hardskill.dict())
     db.add(db_user_hardskill)
@@ -562,6 +574,13 @@ def update_user_hardskill(db: Session, user_hardskill_id: int, user_hardskill: s
 def remove_user_hardskill(db: Session, user_hardskill_id: int):
     _user_hardskill = get_user_hardskill_by_id(
         db=db, user_hardskill_id=user_hardskill_id)
+    db.delete(_user_hardskill)
+    db.commit()
+
+
+def remove_user_hardskill_by_user(db: Session, user_id: int, hardskill_id: int):
+    _user_hardskill = get_user_hardskill_by_hardskill_id(
+        db=db, user_id=user_id, hardskill_id=hardskill_id)
     db.delete(_user_hardskill)
     db.commit()
 
