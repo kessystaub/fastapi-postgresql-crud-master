@@ -64,7 +64,7 @@ class Company(Base):
     name = Column(String(255))
     description = Column(String(255))
     cnpj = Column(String(18))
-    password = Column(String(255))
+    hash_password = Column(String(255))
     email = Column(String(100))
     phone_number = Column(String(11))
     address = Column(String(255))

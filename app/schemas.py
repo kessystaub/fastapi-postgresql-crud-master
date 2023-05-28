@@ -160,7 +160,7 @@ class CompanySchema(BaseModel):
     name: str
     description: str
     cnpj: str
-    password: str
+    hash_password: str = Field(alias='password')
     email: str
     phone_number: str
     address_number: str
@@ -168,6 +168,12 @@ class CompanySchema(BaseModel):
     address: str
     address_complement: str
     city_id: int
+
+    @validator('hash_password', pre=True)
+    def hash_the_password(cls, v):
+        if v:
+            return get_password_hash(v)
+        return v
 
 
 class RequestCompany(BaseModel):

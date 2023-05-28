@@ -252,6 +252,10 @@ def get_company_by_id(db: Session, company_id: int):
     return db.query(Company).filter(Company.id == company_id).first()
 
 
+def get_company_by_email(db: Session, company_email: str):
+    return db.query(Company).filter(Company.email == company_email).first()
+
+
 def create_company(db: Session, company: schemas.CompanySchema):
     db_company = models.Company(**company.dict())
     db.add(db_company)

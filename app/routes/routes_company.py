@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi import Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import Response, RequestCompany
+from security import verify_password, criar_token_jwt
 
 import crud
 
@@ -50,3 +51,18 @@ async def update_company(company_id: int, request: RequestCompany, db: Session =
 async def delete_company(company_id: int,  db: Session = Depends(get_db)):
     crud.remove_company(db, company_id=company_id)
     return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
+
+
+@router_company.post("/loginempresa")
+async def login(username: str, password: str, db: Session = Depends(get_db)):
+    company = crud.get_company_by_email(db, company_email=username)
+    if not company or not verify_password(password, company.hash_password):
+        raise HTTPException(status_code=403,
+                            detail="Email ou nome de usuário incorretos"
+                            )
+
+    return {
+        "company": company,
+        "access_token": criar_token_jwt(company.id),
+        "token_type": "bearer",
+    }
