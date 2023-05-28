@@ -33,6 +33,12 @@ async def get_positions(skip: int = 0, limit: int = 100, db: Session = Depends(g
     return Response(status="Ok", code="200", message="Success fetch all data", result=_positions)
 
 
+@router_position.get("/getPositionByName/{position_name}")
+async def get_positions(position_name: str, db: Session = Depends(get_db)):
+    _positions = crud.get_position_by_name(db, position_name)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_positions)
+
+
 @router_position.get("/{position_id}")
 async def get_positions(position_id: int, db: Session = Depends(get_db)):
     _positions = crud.get_position_by_id(db, position_id)

@@ -626,6 +626,10 @@ def get_position_by_id(db: Session, position_id: int):
     return db.query(Position).filter(Position.id == position_id).first()
 
 
+def get_position_by_name(db: Session, position_name: str):
+    return db.query(Position).filter(Position.name == position_name).first()
+
+
 def create_position(db: Session, position: schemas.PositionSchema):
     db_position = models.Position(**position.dict())
     db.add(db_position)
