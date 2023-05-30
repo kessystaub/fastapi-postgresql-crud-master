@@ -75,6 +75,12 @@ async def get_users(user_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_users)
 
 
+@router_user.get("/get_candidaturas_do_usuario/{user_id}")
+async def get_users(user_id: int, db: Session = Depends(get_db)):
+    _applications = crud.get_candidaturas_do_usuario(db, user_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_applications)
+
+
 @router_user.patch("/{user_id}")
 async def update_user(user_id: int, request: RequestUserUpdate, db: Session = Depends(get_db)):
     _user = crud.update_user(db, user_id=user_id,
