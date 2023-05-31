@@ -304,7 +304,21 @@ def get_joboffer(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_joboffer_by_id(db: Session, joboffer_id: int):
-    return db.query(Joboffer).filter(Joboffer.id == joboffer_id).first()
+    return db.query(Joboffer, Company, City, Position)\
+        .join(Company, Company.id == Joboffer.company_id)\
+        .join(City, City.id == Joboffer.city_id)\
+        .join(Position, Position.id == Joboffer.position_id)\
+        .filter(Joboffer.id == joboffer_id)\
+        .first()
+
+
+def get_vagas(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Joboffer, Company, City, Position)\
+        .join(Company, Company.id == Joboffer.company_id)\
+        .join(City, City.id == Joboffer.city_id)\
+        .join(Position, Position.id == Joboffer.position_id)\
+        .offset(skip).limit(limit)\
+        .all()
 
 
 def create_joboffer(db: Session, joboffer: schemas.JobofferSchema):

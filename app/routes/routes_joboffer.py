@@ -42,6 +42,12 @@ async def get_joboffers(skip: int = 0, limit: int = 100, db: Session = Depends(g
     return Response(status="Ok", code="200", message="Success fetch all data", result=names)
 
 
+@router_joboffer.get("/get_vagas")
+async def get_vagas(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    _joboffers = crud.get_vagas(db, skip, limit)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_joboffers)
+
+
 @router_joboffer.get("/{joboffer_id}")
 async def get_joboffers(joboffer_id: int, db: Session = Depends(get_db)):
     _joboffers = crud.get_joboffer_by_id(db, joboffer_id)
