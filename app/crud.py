@@ -47,7 +47,10 @@ def remove_city(db: Session, city_id: int):
 
 
 def get_user(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(User).offset(skip).limit(limit).all()
+    return db.query(User, City)\
+        .join(City, City.id == User.city_id)\
+        .offset(skip).limit(limit)\
+        .all()
 
 
 def get_user_by_id(db: Session, user_id: int):
@@ -63,6 +66,86 @@ def get_candidaturas_do_usuario(db: Session, user_id: str):
         .join(Status, Status.id == Application.status_id)\
         .join(Joboffer, Joboffer.id == Application.joboffer_id)\
         .filter(Application.user_id == user_id).all()
+
+
+def get_skills_do_usuario(db: Session, user_id: str):
+    result = db.query(User.name.label('nome_user'), UserSoftskill, Softskill)\
+        .join(UserSoftskill, UserSoftskill.user_id == User.id)\
+        .join(Softskill, Softskill.id == UserSoftskill.softskill_id)\
+        .filter(User.id == user_id).group_by(User, UserSoftskill, Softskill).with_entities(User, Softskill).all()
+
+    merged_result = {}
+    for row in result:
+        user = row.User
+        softskill = row.Softskill
+
+        if user.id not in merged_result:
+            merged_result[user.id] = {
+                'User': user,
+                'Softskill': [softskill]
+            }
+        else:
+            merged_result[user.id]['Softskill'].append(softskill)
+
+    finalresult = []
+    for values in merged_result.items():
+        finalresult.append(values)
+
+    return result
+
+
+# def get_skills_do_usuario(db: Session, user_id: str):
+#     result = db.query(User, UserSoftskill, Softskill)\
+#         .join(UserSoftskill, UserSoftskill.user_id == User.id)\
+#         .join(Softskill, Softskill.id == UserSoftskill.softskill_id)\
+#         .join(UserHardskill, UserHardskill.user_id == User.id)\
+#         .join(Hardskill, Hardskill.id == UserHardskill.hardskill_id)\
+#         .join(UserFormation, UserFormation.user_id == User.id)\
+#         .join(Formation, Formation.id == UserFormation.formation_id)\
+#         .join(UserExperience, UserExperience.user_id == User.id)\
+#         .join(Experience, Experience.id == UserExperience.experience_id)\
+#         .filter(User.id == user_id).group_by(User, UserSoftskill, Softskill).with_entities(Softskill.name).all()
+
+#     merged_result = {}
+#     for row in result:
+#         user = row.User
+#         softskill = row.Softskill
+#         hardskill = row.Hardskill
+#         formation = row.Formation
+#         experience = row.Experience
+
+#         if user.id not in merged_result:
+#             merged_result[user.id] = {
+#                 'User': user,
+#                 'Softskill': [softskill],
+#                 'Hardskill': [hardskill],
+#                 'Formation': [formation],
+#                 'Experience': [experience]
+#             }
+#         else:
+#             merged_result[user.id]['Softskill'].append(softskill)
+#             merged_result[user.id]['Hardskill'].append(hardskill)
+#             merged_result[user.id]['Formation'].append(formation)
+#             merged_result[user.id]['Experience'].append(experience)
+
+#     finalresult = []
+#     for values in merged_result.items():
+#         finalresult.append(values)
+
+#     return finalresult
+
+
+# def get_skills_do_usuario(db: Session, user_id: str):
+#     return db.query(User, UserSoftskill, Softskill, UserHardskill, Hardskill, UserFormation, Formation, UserExperience, Experience)\
+#         .join(UserSoftskill, UserSoftskill.user_id == User.id)\
+#         .join(Softskill, Softskill.id == UserSoftskill.softskill_id)\
+#         .join(UserHardskill, UserHardskill.user_id == User.id)\
+#         .join(Hardskill, Hardskill.id == UserHardskill.hardskill_id)\
+#         .join(UserFormation, UserFormation.user_id == User.id)\
+#         .join(Formation, Formation.id == UserFormation.formation_id)\
+#         .join(UserExperience, UserExperience.user_id == User.id)\
+#         .join(Experience, Experience.id == UserExperience.experience_id)\
+#         .filter(User.id == user_id).all()
 
 
 def create_user(db: Session, user: schemas.UserSchema):
@@ -255,8 +338,15 @@ def get_company(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Company).offset(skip).limit(limit).all()
 
 
+# def get_company_by_id(db: Session, company_id: int):
+#     return db.query(Company).filter(Company.id == company_id).first()
+
+
 def get_company_by_id(db: Session, company_id: int):
-    return db.query(Company).filter(Company.id == company_id).first()
+    return db.query(Company, City)\
+        .join(City, City.id == Company.city_id)\
+        .filter(Company.id == company_id)\
+        .first()
 
 
 def get_company_by_email(db: Session, company_email: str):
@@ -318,6 +408,16 @@ def get_vagas(db: Session, skip: int = 0, limit: int = 100):
         .join(City, City.id == Joboffer.city_id)\
         .join(Position, Position.id == Joboffer.position_id)\
         .offset(skip).limit(limit)\
+        .all()
+
+
+def get_company_vagas(db: Session, company_id: int):
+    return db.query(Joboffer, Company, City, Position, Application)\
+        .join(Company, Company.id == Joboffer.company_id)\
+        .join(City, City.id == Joboffer.city_id)\
+        .join(Position, Position.id == Joboffer.position_id)\
+        .join(Application, Application.joboffer_id == Joboffer.id)\
+        .filter(Joboffer.company_id == company_id)\
         .all()
 
 

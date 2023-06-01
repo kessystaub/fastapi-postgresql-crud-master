@@ -75,6 +75,43 @@ async def get_users(user_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_users)
 
 
+@router_user.get("/get_skills/{user_id}")
+async def get_users(user_id: int, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id=user_id)
+
+    formations = []
+    experiences = []
+    softskills = []
+    hardskills = []
+    softskill = crud.get_softskill_by_user_id(db, user.id)
+    hardskill = crud.get_hardskill_by_user_id(db, user.id)
+    experience = crud.get_experience_by_user_id(db, user.id)
+    formation = crud.get_formation_by_user_id(db, user.id)
+    for item in formation:
+        formations.append(crud.get_formation_by_id(
+            db, formation_id=item.formation_id))
+
+    for item in experience:
+        experiences.append(crud.get_experience_by_id(
+            db, experience_id=item.experience_id))
+
+    for item in softskill:
+        softskills.append(crud.get_softskill_by_id(
+            db, softskill_id=item.softskill_id))
+
+    for item in hardskill:
+        hardskills.append(crud.get_hardskill_by_id(
+            db, hardskill_id=item.hardskill_id))
+
+    return {
+        "user": user,
+        "formations": formations,
+        "experiences": experiences,
+        "softskills": softskills,
+        "hardskills": hardskills,
+    }
+
+
 @router_user.get("/get_candidaturas_do_usuario/{user_id}")
 async def get_users(user_id: int, db: Session = Depends(get_db)):
     _applications = crud.get_candidaturas_do_usuario(db, user_id)
