@@ -597,6 +597,10 @@ def get_formation_by_user_id(db: Session, user_id: int):
     return db.query(UserFormation).filter(UserFormation.user_id == user_id).all()
 
 
+def get_formation_by_user_id2(db: Session, user_id: int):
+    return db.query(UserFormation, Formation, Institution).join(Formation, Formation.id == UserFormation.formation_id).join(Institution, Institution.id == Formation.institution_id).filter(UserFormation.user_id == user_id).all()
+
+
 def create_user_formation(db: Session, user_formation: schemas.UserFormationSchema):
     db_user_formation = models.UserFormation(**user_formation.dict())
     db.add(db_user_formation)

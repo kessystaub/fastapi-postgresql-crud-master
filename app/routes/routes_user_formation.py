@@ -21,9 +21,10 @@ def get_db():
 
 @router_user_formation.post("/")
 async def create_user_formation_service(request: RequestUserFormation, db: Session = Depends(get_db)):
-    crud.create_user_formation(db, user_formation=request.parameter)
+    form = crud.create_user_formation(db, user_formation=request.parameter)
     return Response(status="Ok",
                     code="200",
+                    result=form,
                     message="UserFormation created successfully").dict(exclude_none=True)
 
 
@@ -42,6 +43,12 @@ async def get_user_formations(user_formation_id: int, db: Session = Depends(get_
 @router_user_formation.get("/getFormationsByUserId/{user_id}")
 async def get_user_formations(user_id: int, db: Session = Depends(get_db)):
     _user_formations = crud.get_formation_by_user_id(db, user_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_user_formations)
+
+
+@router_user_formation.get("/getFormationsByUserId2/{user_id}")
+async def get_user_formations(user_id: int, db: Session = Depends(get_db)):
+    _user_formations = crud.get_formation_by_user_id2(db, user_id)
     return Response(status="Ok", code="200", message="Success fetch all data", result=_user_formations)
 
 
