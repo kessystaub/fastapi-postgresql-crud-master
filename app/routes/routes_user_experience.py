@@ -45,6 +45,12 @@ async def get_user_experiences(user_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_user_experiences)
 
 
+@router_user_experience.get("/getExperiencesByUserId2/{user_id}")
+async def get_user_experiences(user_id: int, db: Session = Depends(get_db)):
+    _user_experiences = crud.get_experience_by_user_id2(db, user_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_user_experiences)
+
+
 @router_user_experience.patch("/{user_experience_id}")
 async def update_user_experience(user_experience_id: int, request: RequestUserExperience, db: Session = Depends(get_db)):
     _user_experience = crud.update_user_experience(db, user_experience_id=user_experience_id,

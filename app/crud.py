@@ -654,6 +654,10 @@ def get_experience_by_user_id(db: Session, user_id: int):
     return db.query(UserExperience).filter(UserExperience.user_id == user_id).all()
 
 
+def get_experience_by_user_id2(db: Session, user_id: int):
+    return db.query(UserExperience, Experience, Position).join(Experience, Experience.id == UserExperience.experience_id).join(Position, Position.id == Experience.position_id).filter(UserExperience.user_id == user_id).all()
+
+
 def create_user_experience(db: Session, user_experience: schemas.UserExperienceSchema):
     db_user_experience = models.UserExperience(**user_experience.dict())
     db.add(db_user_experience)
