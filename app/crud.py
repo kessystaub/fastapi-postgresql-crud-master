@@ -710,6 +710,10 @@ def get_hardskill_by_user_id(db: Session, user_id: int):
     return db.query(UserHardskill).filter(UserHardskill.user_id == user_id).all()
 
 
+def get_hardskill_by_user_id2(db: Session, user_id: int):
+    return db.query(UserHardskill, Hardskill).join(Hardskill, Hardskill.id == UserHardskill.hardskill_id).filter(UserHardskill.user_id == user_id).all()
+
+
 def get_user_hardskill_by_hardskill_id(db: Session, user_id: int, hardskill_id: int):
     return db.query(UserHardskill).filter((UserHardskill.hardskill_id == hardskill_id) & (UserHardskill.user_id == user_id)).first()
 
