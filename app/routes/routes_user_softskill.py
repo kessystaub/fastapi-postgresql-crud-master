@@ -45,6 +45,12 @@ async def get_user_softskills(user_id: int, db: Session = Depends(get_db)):
     return Response(status="Ok", code="200", message="Success fetch all data", result=_user_softskills)
 
 
+@router_user_softskill.get("/getSoftskillsByUserId2/{user_id}")
+async def get_user_softskills(user_id: int, db: Session = Depends(get_db)):
+    _user_softskills = crud.get_softskill_by_user_id2(db, user_id)
+    return Response(status="Ok", code="200", message="Success fetch all data", result=_user_softskills)
+
+
 @router_user_softskill.patch("/{user_softskill_id}")
 async def update_user_softskill(user_softskill_id: int, request: RequestUserSoftskill, db: Session = Depends(get_db)):
     _user_softskill = crud.update_user_softskill(db, user_softskill_id=user_softskill_id,

@@ -540,6 +540,10 @@ def get_softskill_by_user_id(db: Session, user_id: int):
     return db.query(UserSoftskill).filter(UserSoftskill.user_id == user_id).all()
 
 
+def get_softskill_by_user_id2(db: Session, user_id: int):
+    return db.query(UserSoftskill, Softskill).join(Softskill, Softskill.id == UserSoftskill.softskill_id).filter(UserSoftskill.user_id == user_id).all()
+
+
 def get_user_softskill_by_softskill_id(db: Session, user_id: int, softskill_id: int):
     return db.query(UserSoftskill).filter((UserSoftskill.softskill_id == softskill_id) & (UserSoftskill.user_id == user_id)).first()
 
