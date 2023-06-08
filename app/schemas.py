@@ -182,7 +182,6 @@ class RequestCompany(BaseModel):
 
 class JobofferSchema(BaseModel):
     id: Optional[int] = None
-    code: int
     name: str
     description: str
     city_id: int

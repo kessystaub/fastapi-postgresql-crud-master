@@ -78,7 +78,6 @@ class Joboffer(Base):
     __tablename__ = "joboffer"
 
     id = Column(Integer, primary_key=True, index=True)
-    code = Column(String(10))
     name = Column(String(100))
     description = Column(String(255))
     city_id = Column(Integer, ForeignKey("city.id"))

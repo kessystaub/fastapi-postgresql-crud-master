@@ -160,7 +160,6 @@ def update_user(db: Session, user_id: int, user: schemas.UserSchema):
     _user = get_user_by_id(db=db, user_id=user_id)
 
     _user.name = user.name
-    _user.password: user.password
     _user.email: user.email
     _user.phone: user.phone
     _user.address: user.address
@@ -412,11 +411,10 @@ def get_vagas(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_company_vagas(db: Session, company_id: int):
-    return db.query(Joboffer, Company, City, Position, Application)\
+    return db.query(Joboffer, Company, City, Position)\
         .join(Company, Company.id == Joboffer.company_id)\
         .join(City, City.id == Joboffer.city_id)\
         .join(Position, Position.id == Joboffer.position_id)\
-        .join(Application, Application.joboffer_id == Joboffer.id)\
         .filter(Joboffer.company_id == company_id)\
         .all()
 
@@ -432,7 +430,6 @@ def create_joboffer(db: Session, joboffer: schemas.JobofferSchema):
 def update_joboffer(db: Session, joboffer_id: int, joboffer: schemas.JobofferSchema):
     _joboffer = get_joboffer_by_id(db=db, joboffer_id=joboffer_id)
 
-    _joboffer.code = joboffer.code
     _joboffer.name: joboffer.name
     _joboffer.description: joboffer.description
     _joboffer.city_id: joboffer.city_id
