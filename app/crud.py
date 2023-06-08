@@ -410,6 +410,16 @@ def get_vagas(db: Session, skip: int = 0, limit: int = 100):
         .all()
 
 
+def get_vagas_by_user(db: Session, user_id: int):
+    return db.query(Joboffer, Company, City, Position, Application)\
+        .join(Company, Company.id == Joboffer.company_id)\
+        .join(City, City.id == Joboffer.city_id)\
+        .join(Position, Position.id == Joboffer.position_id)\
+        .join(Application, Application.joboffer_id == Joboffer.id)\
+        .filter(Application.user_id > 0)\
+        .all()
+
+
 def get_company_vagas(db: Session, company_id: int):
     return db.query(Joboffer, Company, City, Position)\
         .join(Company, Company.id == Joboffer.company_id)\
